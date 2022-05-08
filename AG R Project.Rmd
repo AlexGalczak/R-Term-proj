@@ -60,20 +60,50 @@ First a trash generation calculations and plot in the US by type:
 
 generated = generated %>%
   slice(1,2,6,7,11,12,16) %>%
-  pivot_longer(cols = c(2:16), names_to = 'Year', values_to = 'Weight_tons')
+  pivot_longer(cols = c(2:16), names_to = 'Year', values_to = 'Weight_tons') %>%
+  mutate(Year = as.numeric(Year))
 
 
-ggplot(data=generated, aes(x=Year, y= Weight_tons)) + geom_col(aes(fill = Materials), position = 'dodge') + scale_fill_brewer(palette="Dark2") 
+test = ggplot(data=generated, aes(x=Year, y= Weight_tons)) + geom_col(aes(fill = Materials), position = 'dodge') + scale_fill_brewer(palette="Dark2") + ylab('Weight (tons)') + ggtitle('Trash production in the United States 1960-2018') +
+  theme_void() + theme(plot.title = element_text(size = 12))
 
 
 
 ?pivot_longer
 
 
+trash_gen 
+  
+generated_tot <- generated %>%
+  filter(Materials == 'Products - Total Materials')
+  
+ggplot(data=generated_tot, aes(x=Year, y= Weight_tons)) + geom_area( fill="#69b3a2", alpha=0.4) +
+  geom_line(color="#69b3a2", size=2) +
+  geom_point(size=3, color="#69b3a2")
+
+ggplot(data=generated, aes(x=Year, y= Weight_tons)) + geom_area() 
 
 
++
+  geom_line(color="#69b3a2", size=2) +
+  geom_point(size=3, color="#69b3a2")
 
-filter(Materials == c('Products - Paper and Paperboard','Products - Metals - Total','Products - Plastics', 'Products - Glass','Products - Plastics', 'Products - Other', 'Products - Total Materials','Other Wastes - Total'))
+?geom_area
+
+
+ggplot(data=generated, aes(x=Year, y= Weight_tons)) + geom_col(aes(fill = Materials), position = 'dodge') + scale_fill_brewer(palette="Dark2") + ylab('Weight (tons)') + ggtitle('Trash production in the United States 1960-2018') +
+theme_bw() + 
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    legend.background = element_rect(fill = "white", size = 5, colour = "white"),
+    legend.justification = c(0, 1),
+    legend.position = c(0, 1),
+    axis.ticks = element_line(colour = "grey70", size = 0.2),
+    panel.grid.major = element_line(colour = "grey70", size = 0.1),
+    panel.grid.minor = element_blank()
+  )
+
+
 
 
 ```
@@ -169,7 +199,7 @@ world_map2018 <- ggplot() +
   geom_point(data = cleanup %>% filter(Year == c('2015','2016','2017','2018')), aes(x=X, y=Y, color = Year, size = Totalltems_EventRecord), alpha = 0.6) +
   scale_color_brewer(palette="Dark2") +
   theme_void() +
-  theme(legend.position = "right") + 
+  theme(legend.position = "right", plot.background = element_rect(fill = "lightblue")) + 
   ggtitle("Volunteer Clean Up Events 2015-2018") +
   ylim(-50, NA)
 
